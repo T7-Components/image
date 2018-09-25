@@ -207,11 +207,11 @@ class Image extends React.Component {
       onImageLoad
     } = this
 
-    // Update source.
-    image.src = preloader.src
-
     // Add the load listener on the image.
     image.addEventListener('load', onImageLoad)
+
+    // Update source.
+    image.src = preloader.src
   }
 
   /**
