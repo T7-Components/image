@@ -237,12 +237,12 @@ class Image extends React.Component {
   onImageLoad (event = {}) {
     // Class.
     const {
-      fallback,
       image,
       preservedStyle,
 
       // Props.
       props: {
+        fallback,
         onFallback,
         onLoad,
         src
@@ -382,12 +382,19 @@ class Image extends React.Component {
     const strThresholds =
       normalizedThresholds.join(' ')
 
-    if (!(strRoot in o)) {
+    // Add layer?
+    if (!o[strRoot]) {
       o[strRoot] = {}
     }
 
     // Does observer exist?
     if (!o[strRoot][strThresholds]) {
+      // Temp.
+      o[strRoot][strThresholds] = {
+        observe: () => {},
+        unobserve: () => {}
+      }
+
       // Callback.
       const f = (entries = []) => {
         // Loop through.
@@ -415,18 +422,19 @@ class Image extends React.Component {
         thresholds: normalizedThresholds
       }
 
-      // Create observer.
-      const observer =
-        new window.IntersectionObserver(f, options)
+      // Has support?
+      if (typeof window.IntersectionObserver === 'function') {
+        // Create observer.
+        const observer =
+          new window.IntersectionObserver(f, options)
 
-      // Assign.
-      o[strRoot][strThresholds] = observer
+        // Assign.
+        o[strRoot][strThresholds] = observer
+      }
     }
 
     // Expose observer.
-    return (
-      o[strRoot][strThresholds]
-    )
+    return o[strRoot][strThresholds]
   }
 
   /**
@@ -456,8 +464,10 @@ class Image extends React.Component {
     // Props for image.
     const propsForImage = {
       alt,
+      height,
       src,
       style,
+      width,
 
       // Assign ref.
       ref: (el) => {
