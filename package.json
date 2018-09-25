@@ -1,0 +1,70 @@
+{
+  "name": "@t7/image",
+  "version": "0.0.0",
+  "main": "dist/index.js",
+  "description": "This is a React image component, that loads once an image is in the viewport.",
+  "author": "TandemSeven <github@tandemseven.com>",
+  "license": "MIT",
+  "repository": "https://github.com/t7-components/image",
+  "keywords": [
+    "image",
+    "t7",
+    "tandemseven"
+  ],
+  "jest": {
+    "collectCoverageFrom": [
+      "**/source/**.js",
+      "!**/source/demo.js"
+    ]
+  },
+  "scripts": {
+    "clean": "rimraf build && rimraf dist",
+    "transpile": "babel source -d dist --copy-files",
+    "prebuild": "npm run clean && npm run test_with_coverage",
+    "build": "webpack --mode production && npm run transpile",
+    "prepublishOnly": "npm run test && npm run transpile",
+    "lint": "eslint 'source/**/*.js' --fix",
+    "pretest": "npm run lint",
+    "test_with_coverage": "npm run lint && jest --coverage",
+    "test": "npm run lint && jest",
+    "prepush": "npm test",
+    "postmerge": "npm install",
+    "start": "webpack-dev-server --mode development --open"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.0.1",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-react": "^7.0.0",
+    "autoprefixer": "^9.1.5",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-loader": "^8.0.2",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "css-loader": "^1.0.0",
+    "eslint": "^5.5.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-config-standard-react": "^7.0.2",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-node": "^7.0.1",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-react": "^7.11.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "html-webpack-plugin": "^3.2.0",
+    "jest": "^23.6.0",
+    "mini-css-extract-plugin": "^0.4.2",
+    "postcss-loader": "^3.0.0",
+    "pre-commit": "^1.2.2",
+    "react-addons-test-utils": "^15.6.2",
+    "react-dom": "^16.5.0",
+    "rimraf": "^2.6.2",
+    "style-loader": "^0.23.0",
+    "webpack": "^4.18.0",
+    "webpack-cli": "^3.1.0",
+    "webpack-dev-server": "^3.1.8"
+  },
+  "dependencies": {
+    "@t7/utils": "0.0.12",
+    "prop-types": "^15.5.0",
+    "react": "^16.5.1"
+  }
+}

@@ -1,0 +1,49 @@
+/*
+Body.
+==================================================
+*/
+
+html {
+  font-family: Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+body {
+  padding: 20px;
+}
+
+a {
+  color: blue;
+}
+
+body > div > hr {
+  margin-left: -20px;
+  margin-right: -20px;
+}
+
+/*
+Spacing.
+==================================================
+*/
+
+p,
+dl,
+hr,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+ol,
+ul,
+pre,
+table,
+address,
+fieldset,
+figure,
+blockquote {
+  margin: 0;
+  margin-bottom: 20px;
+}
