@@ -1,5 +1,9 @@
 # @t7/image
 
+```
+npm install @t7/image --save-dev
+```
+
 This is a React image component, that loads once an image is in the viewport.
 
 ---
