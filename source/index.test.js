@@ -320,4 +320,30 @@ describe('Image', () => {
         target: el.image
       })
   })
+
+  // ===============================
+  // Test for intersection observer.
+  // ===============================
+
+  it('builds an intersection observer', () => {
+    // Dummy values.
+    const rootMargin = '15px 20px 5px 10px'
+
+    const thresholds = [
+      0.2,
+      0.5,
+      0.75,
+      1
+    ]
+
+    // Fire event.
+    const observer =
+      el.getIntersectionObserver(rootMargin, thresholds)
+
+    expect(observer)
+      .toMatchObject({
+        observe,
+        unobserve
+      })
+  })
 })
