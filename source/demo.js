@@ -22,11 +22,11 @@ class Demo extends React.Component {
           @t7/image
         </h1>
 
-        <a href='https://github.com/T7-Components/image/blob/master/source/demo.js'>
-          View "demo.js" on GitHub
-        </a>
-
-        <hr />
+        <p>
+          <a href='https://github.com/T7-Components/image/blob/master/source/demo.js'>
+            View "demo.js" on GitHub
+          </a>
+        </p>
 
         <p>
           Scroll waaay down…
