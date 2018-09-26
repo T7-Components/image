@@ -123,7 +123,7 @@ The `<Image>` component allows you to hook into various events during the loadin
 
 #### `onIntersection`
 
-The `onIntersection` listener is dispatched when the `<Image>` all/part of the image is visible for the first time.
+The `onIntersection` listener is dispatched when all/part of the image is visible for the first time.
 
 #### `onLoad`
 
