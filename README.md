@@ -1,6 +1,6 @@
 # @t7/image
 
-The `<Image>` component displays an image when it is visible or nearly visible.
+The `<Image>` component displays an image when it is partially or fully visible in the viewport.
 
 ```
 npm install @t7/image --save-dev
