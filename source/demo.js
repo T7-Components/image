@@ -31,7 +31,7 @@ class Demo extends React.Component {
         <div
           style={{
             background: '#ccc',
-            height: '9999px',
+            height: '150vh',
             marginBottom: '20px'
           }}
         />
@@ -39,23 +39,49 @@ class Demo extends React.Component {
         <hr />
 
         <p>
-          The following image will load approximately 5 seconds after scrolling into view.
+          The following image will load approximately 5 seconds after scrolling 50% into view.
         </p>
 
         <p>
           <Image
+            alt='IMAGE 1'
             width='800'
             height='200'
 
-            src='https://sloow.me/5000/placehold.it/800x200/69c/fff?text=LOADED+IMAGE'
+            // Source.
+            src='https://sloow.me/5000/placehold.it/800x200/69c/fff?text=IMAGE+1'
+
+            // Fallback source.
+            fallback='https://placehold.it/800x200/69c/fff?text=IMAGE+1+FALLBACK'
 
             style={{
               background: '#69c'
             }}
 
-            onLoad={(e) => {
+            // Intersection.
+            rootMargin='0px 0px 0px 0px'
+
+            // 50% viewable.
+            thresholds='0.5'
+
+            // Intersection event.
+            onIntersection={(event) => {
               if (window.console) {
-                window.console.log('loaded')
+                window.console.log('IMAGE 1 INTERSECTION')
+              }
+            }}
+
+            // Load event.
+            onLoad={(event) => {
+              if (window.console) {
+                window.console.log('IMAGE 1 LOADED')
+              }
+            }}
+
+            // Fallback load event.
+            onFallback={(event) => {
+              if (window.console) {
+                window.console.log('IMAGE 1 FALLBACK LOADED')
               }
             }}
           />
@@ -64,23 +90,48 @@ class Demo extends React.Component {
         <hr />
 
         <p>
-          The following image will load approximately 5 seconds after scrolling into view.
+          The following image will fail approximately 5 seconds after scrolling 50% into view.
         </p>
 
         <p>
           <Image
+            alt='IMAGE 2'
             width='800'
             height='200'
 
-            src='https://sloow.me/5000/placehold.it/800x200/393/fff?text=LOADED+IMAGE'
+            src='https://sloow.me/5000+404/placehold.it/800x200/393/fff?text=IMAGE+2'
+
+            // Fallback source.
+            fallback='https://placehold.it/800x200/393/fff?text=IMAGE+2+FALLBACK'
 
             style={{
               background: '#393'
             }}
 
-            onLoad={(e) => {
+            // Intersection.
+            rootMargin='0px 0px 0px 0px'
+
+            // 50% viewable.
+            thresholds='0.5'
+
+            // Intersection event.
+            onIntersection={(event) => {
               if (window.console) {
-                window.console.log('loaded')
+                window.console.log('IMAGE 2 INTERSECTION')
+              }
+            }}
+
+            // Load event.
+            onLoad={(event) => {
+              if (window.console) {
+                window.console.log('IMAGE 2 LOADED')
+              }
+            }}
+
+            // Fallback load event.
+            onFallback={(event) => {
+              if (window.console) {
+                window.console.log('IMAGE 2 FALLBACK LOADED')
               }
             }}
           />
