@@ -44,10 +44,10 @@ class Demo extends React.Component {
 
         <p>
           <Image
-            width='400'
+            width='800'
             height='200'
 
-            src='https://sloow.me/5000/placehold.it/400x200/69c/fff?text=LOADED+IMAGE'
+            src='https://sloow.me/5000/placehold.it/800x200/69c/fff?text=LOADED+IMAGE'
 
             style={{
               background: '#69c'
@@ -69,10 +69,10 @@ class Demo extends React.Component {
 
         <p>
           <Image
-            width='400'
+            width='800'
             height='200'
 
-            src='https://sloow.me/5000/placehold.it/400x200/393/fff?text=LOADED+IMAGE'
+            src='https://sloow.me/5000/placehold.it/800x200/393/fff?text=LOADED+IMAGE'
 
             style={{
               background: '#393'
