@@ -32,6 +32,8 @@ Test coverage:
 
 ---
 
+## Image Props
+
 `<Image>` uses `width` and `height` props to force an immediate layout, as if the image source had already been loaded. This prevents unnecessary recalculations by the browser and allows the image to be resized via CSS with proportional aspect ratios.
 
 It causes an encoded, inline SVG to be generated, which allows for a solid color to be displayed while the image is still processing. This prevents unintended rendering of `alt` text or the display of a browser's default "broken image" icon.
@@ -97,7 +99,7 @@ See the [Intersection Observer options](https://developer.mozilla.org/en-US/docs
 
 ---
 
-### Image Events
+## Image Events
 
 The `<Image>` component allows you to hook into various events during the loading process.
 
@@ -121,21 +123,21 @@ The `<Image>` component allows you to hook into various events during the loadin
 />
 ```
 
-#### `onIntersection`
+### `onIntersection`
 
 The `onIntersection` listener is dispatched when all/part of the image is visible for the first time.
 
-#### `onLoad`
+### `onLoad`
 
 The `onLoad` listener is dispatched when the `src` file has loaded.
 
-#### `onFallback`
+### `onFallback`
 
 The `onFallback` listener is dispatched when the `fallback` file has loaded.
 
 ---
 
-### More Examples
+## More Examples
 
 The following examples use the [Sloow.me](https://sloow.me/) proxy site to purposefully delay image loading.
 
