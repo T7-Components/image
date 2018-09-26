@@ -9,7 +9,7 @@ npm install @t7/image --save-dev
 For complete browser support, please include an intersection-observer polyfill:
 
 ```
-npm install intersection-observer
+npm install intersection-observer --save
 ```
 
 ---
