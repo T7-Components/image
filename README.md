@@ -32,9 +32,9 @@ Test coverage:
 
 ---
 
-`<Image>` uses the `width` and `height` properties to immediate receive layout, as if the image source had been loaded. This prevents unnecessary layout recalculations by the browser and allows the image to be resized in CSS with proportional aspect ratios.
+The `<Image>` component uses the `width` and `height` properties to immediate receive layout, as if the image source had been loaded. This prevents unnecessary layout recalculations by the browser and allows the image to be resized in CSS with proportional aspect ratios.
 
-The following examples are equivalent:
+Passing these props yields the following markup output.
 
 ```jsx
 <Image
@@ -61,49 +61,44 @@ The following examples are equivalent:
 />
 ```
 
-`<Image>` uses the `rootMargin` and `thresholds` properties along with the
-[Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)
-to load its source only as it comes into view.
+`<Image>` uses the `rootMargin` and `thresholds` properties along with the [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) to load its source only as it comes into view.
 
-For instance, if you wanted the image to be loaded only after it passed the 50%
-mark, you could set the `thresholds` property to `0.5`.
+For instance, if you wanted the image to be loaded only after it passed the 50% mark, you could set the `thresholds` property to `0.5`.
 
-Once visible or near to being visible, `<Image>` loads the `placeholder` and
-`src` images simultaneously. If the `placeholder` image is loaded before the
-`src`, then the placeholder is made visible as a background image. Once the
-`src` is loaded, then it is immediately displayed and the `placeholder`
-background image is removed. If the `src` cannot be loaded, then the `fallback`
-image is displayed instead.
+Once visible, `<Image>` loads the `placeholder` and `src` images simultaneously. If the `placeholder` image is loaded before the `src`, then the placeholder is made visible as a background image. Once the `src` is loaded, then it is immediately displayed and the `placeholder` background image is removed. If the `src` cannot be loaded, then the `fallback` image is displayed instead.
 
 ```jsx
 <Image
-  alt="a test image: 400x225"
+  // For accessibility.
+  alt="Test image: 400x225."
+
+  // Sources.
   src="https://placehold.it/400x225/393/fff?text=TEST+IMAGE"
   placeholder="https://placehold.it/400x225?text=LOADING"
   fallback="https://placehold.it/400x225/f60/fff?text=FALLBACK"
+
+  // Dimensions.
   width="800"
   height="450"
+
+  // Intersection observer.
   rootMargin="50px 0px"
   thresholds="0.01"
 />
 ```
 
-See the
-[Intersection Observer options](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API#Intersection_observer_options)
-for best usage of `root`, `rootMargin`,
-and `thresholds`.
+See the [Intersection Observer options](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API#Intersection_observer_options) for best usage of `rootMargin` and `thresholds`.
 
 ---
 
 ### Image Events
 
-The **Image** component allows you to hook into various events during the
-loading process.
+The `<Image>` component allows you to hook into various events during the loading process.
 
 ```jsx
 <Image
-  alt="a test image: 400x225"
-  src="https://placehold.it/400x225"
+  alt="Test image: 400x225."
+  src="https://placehold.it/400x225."
   onIntersection={event => console.log('image is intersected, src is loading')}
   onLoad={event => console.log('src is loaded')}
   onFallback={event => console.log('fallback is loaded')}
@@ -131,7 +126,7 @@ An image that takes at least 5 seconds to load:
 
 ```jsx
 <Image
-  alt="a test image: 400x225"
+  alt="Test image: 400x225."
   src="https://sloow.me/5000/placehold.it/400x225/393/fff?text=loaded+image"
   placeholder="https://placehold.it/400x225?text=placeholder+image"
   fallback="https://placehold.it/400x225/f60/fff?text=fallback+image"
@@ -144,7 +139,7 @@ An image that fails to load after at least 3 seconds:
 
 ```jsx
 <Image
-  alt="a test image: 400x225"
+  alt="Test image: 400x225."
   src="https://sloow.me/3000+404/placehold.it/400x225/393/fff?text=loaded+image"
   placeholder="https://placehold.it/400x225?text=placeholder+image"
   fallback="https://placehold.it/400x225/f60/fff?text=fallback+image"
