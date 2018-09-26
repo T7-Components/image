@@ -6,7 +6,7 @@ The `<Image>` component displays an image when it is visible or nearly visible.
 npm install @t7/image --save-dev
 ```
 
-For complete browser support, please include an intersection-observer polyfill:
+For complete browser support, please include an `IntersectionObserver` polyfill:
 
 ```
 npm install intersection-observer --save
@@ -32,7 +32,9 @@ Test coverage:
 
 ---
 
-The `<Image>` component uses the `width` and `height` properties to immediate receive layout, as if the image source had been loaded. This prevents unnecessary layout recalculations by the browser and allows the image to be resized in CSS with proportional aspect ratios.
+`<Image>` uses `width` and `height` props to force an immediate layout, as if the image source had already been loaded. This prevents unnecessary recalculations by the browser and allows the image to be resized via CSS with proportional aspect ratios.
+
+It causes an encoded, inline SVG to be generated, which allows for a solid color to be displayed while the image is still processing. This prevents unintended rendering of `alt` text or the display of a browser's default "broken image" icon.
 
 Passing these props yields the following markup output.
 
@@ -41,9 +43,9 @@ Passing these props yields the following markup output.
   width="800"
   height="450"
   style={{
-    background:'#393'
-    width:'50%',
-    height:'auto'
+    background: '#393',
+    width: '50%',
+    height: 'auto'
   }}
 />
 ```
@@ -52,7 +54,11 @@ Passing these props yields the following markup output.
 <img
   width="800"
   height="450"
-  style="width:50%;height:auto;background:#393"
+  style="
+    background: #393;
+    width: 50%;
+    height: auto;
+  "
   src="data:image/svg+xml,%3Csvg
     xmlns='http://www.w3.org/2000/svg'
     width='800'
@@ -61,9 +67,9 @@ Passing these props yields the following markup output.
 />
 ```
 
-`<Image>` uses the `rootMargin` and `thresholds` properties along with the [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) to load its source only as it comes into view.
+`<Image>` uses the `rootMargin` and `thresholds` props along with the [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) to load its source only as it comes into view.
 
-For instance, if you wanted the image to be loaded only after it passed the 50% mark, you could set the `thresholds` property to `0.5`.
+For instance, if you wanted the image to be loaded only after it passed the `50%` mark, you could set the `thresholds` prop to `0.5`.
 
 Once visible, `<Image>` loads the `placeholder` and `src` images simultaneously. If the `placeholder` image is loaded before the `src`, then the placeholder is made visible as a background image. Once the `src` is loaded, then it is immediately displayed and the `placeholder` background image is removed. If the `src` cannot be loaded, then the `fallback` image is displayed instead.
 
@@ -74,7 +80,7 @@ Once visible, `<Image>` loads the `placeholder` and `src` images simultaneously.
 
   // Sources.
   src="https://placehold.it/400x225/393/fff?text=TEST+IMAGE"
-  placeholder="https://placehold.it/400x225?text=LOADING"
+  placeholder="https://placehold.it/400x225/393/fff?text=LOADING"
   fallback="https://placehold.it/400x225/f60/fff?text=FALLBACK"
 
   // Dimensions.
@@ -130,6 +136,8 @@ The `onFallback` listener is dispatched when the `fallback` file has loaded.
 ---
 
 ### More Examples
+
+The following examples use the [Sloow.me](https://sloow.me/) proxy site to purposefully delay image loading.
 
 An image that takes at least 5 seconds to load:
 
