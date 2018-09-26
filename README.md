@@ -1,6 +1,6 @@
 # @t7/image
 
-The `Image` component displays an image when it is visible or nearly visible.
+The `<Image>` component displays an image when it is visible or nearly visible.
 
 ```
 npm install @t7/image --save-dev
@@ -32,10 +32,7 @@ Test coverage:
 
 ---
 
-`<Image>` uses the `width` and `height` properties to immediate receive layout,
-as if the image source had been loaded. This prevents unnecessary layout
-recalculations by the browser and allows the image to be resized in CSS with
-proportional aspect ratios.
+`<Image>` uses the `width` and `height` properties to immediate receive layout, as if the image source had been loaded. This prevents unnecessary layout recalculations by the browser and allows the image to be resized in CSS with proportional aspect ratios.
 
 The following examples are equivalent:
 
@@ -43,7 +40,11 @@ The following examples are equivalent:
 <Image
   width="800"
   height="450"
-  style={{width:'50%',height:'auto',background:'#393'}}
+  style={{
+    background:'#393'
+    width:'50%',
+    height:'auto'
+  }}
 />
 ```
 
