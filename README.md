@@ -102,11 +102,21 @@ loading process.
 
 ```jsx
 <Image
-  alt="a test image: 400x225"
+  alt="A test image: 400x225."
   src="https://placehold.it/400x225"
-  onIntersection={event => console.log('image is intersected, src is loading')}
-  onLoad={event => console.log('src is loaded')}
-  onFallback={event => console.log('fallback is loaded')}
+
+  // Events.
+  onIntersection={(event) => {
+    console.log('Image is intersected, loading remote source.')
+  }}
+
+  onLoad={(event) => {
+    console.log('Image source has loaded.')
+  }}
+
+  onLoad={(event) => {
+    console.log('Fallback image source had loaded..')
+  }}
 />
 ```
 
