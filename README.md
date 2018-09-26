@@ -97,22 +97,35 @@ The `<Image>` component allows you to hook into various events during the loadin
 
 ```jsx
 <Image
-<<<<<<< HEAD
-  alt="Test image: 400x225."
-  src="https://placehold.it/400x225."
-  onIntersection={event => console.log('image is intersected, src is loading')}
-  onLoad={event => console.log('src is loaded')}
-  onFallback={event => console.log('fallback is loaded')}
+  alt="A test image: 400x225."
+  src="https://placehold.it/400x225"
+
+  // Events.
+  onIntersection={(event) => {
+    console.log('Image is intersected, loading remote source.')
+  }}
+
+  onLoad={(event) => {
+    console.log('Image source has loaded.')
+  }}
+
+  onLoad={(event) => {
+    console.log('Fallback image source had loaded..')
+  }}
 />
 ```
 
+#### `onIntersection`
 
 The `onIntersection` listener is dispatched when the `<Image>` all/part of the image is visible for the first time.
 
+#### `onLoad`
 
 The `onLoad` listener is dispatched when the `src` file has loaded.
 
+#### `onFallback`
 
+The `onFallback` listener is dispatched when the `fallback` file has loaded.
 
 ---
 
