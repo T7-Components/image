@@ -108,15 +108,15 @@ The `<Image>` component allows you to hook into various events during the loadin
 
   // Events.
   onIntersection={(event) => {
-    console.log('Image is intersected, loading remote source.')
+    console.log('Interseciton detected. Image loading started.')
   }}
 
   onLoad={(event) => {
-    console.log('Image source has loaded.')
+    console.log('Image loading complete.')
   }}
 
-  onLoad={(event) => {
-    console.log('Fallback image source had loaded..')
+  onFallback={(event) => {
+    console.log('Fallback loading complete.')
   }}
 />
 ```
