@@ -6,7 +6,7 @@ The `<Image>` component displays an image when it is visible or nearly visible.
 npm install @t7/image --save-dev
 ```
 
-For complete browser support, please include an `IntersectionObserver` polyfill:
+For complete browser support, please include a `window.IntersectionObserver` polyfill:
 
 ```
 npm install intersection-observer --save
