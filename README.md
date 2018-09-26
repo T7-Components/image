@@ -143,7 +143,9 @@ The `onFallback` listener is dispatched when the `fallback` file has loaded.
 
 The following examples use the [Sloow.me](https://sloow.me/) proxy site to purposefully delay image loading.
 
-An image that takes at least 5 seconds to load:
+It can be helpful testing with a delayed response, to ensure that images are not silently loading "below the fold" before being scrolled into view.
+
+Example: After (at least) 5 seconds, image load completes.
 
 ```jsx
 <Image
@@ -156,7 +158,7 @@ An image that takes at least 5 seconds to load:
 />
 ```
 
-An image that fails to load after at least 3 seconds:
+Example: After (at least) 3 seconds, image load fails.
 
 ```jsx
 <Image
