@@ -144,9 +144,9 @@ An image that takes at least 5 seconds to load:
 ```jsx
 <Image
   alt="Test image: 400x225."
-  src="https://sloow.me/5000/placehold.it/400x225/393/fff?text=loaded+image"
-  placeholder="https://placehold.it/400x225?text=placeholder+image"
-  fallback="https://placehold.it/400x225/f60/fff?text=fallback+image"
+  src="https://sloow.me/5000/placehold.it/400x225/393/fff?text=TEST+IMAGE"
+  placeholder="https://placehold.it/400x225?text=PLACEHOLDER"
+  fallback="https://placehold.it/400x225/f60/fff?text=FALLBACK"
   width="400"
   height="225"
 />
@@ -157,9 +157,9 @@ An image that fails to load after at least 3 seconds:
 ```jsx
 <Image
   alt="Test image: 400x225."
-  src="https://sloow.me/3000+404/placehold.it/400x225/393/fff?text=loaded+image"
-  placeholder="https://placehold.it/400x225?text=placeholder+image"
-  fallback="https://placehold.it/400x225/f60/fff?text=fallback+image"
+  src="https://sloow.me/3000+404/placehold.it/400x225/393/fff?text=TEST+IMAGE"
+  placeholder="https://placehold.it/400x225/393/fff?text=PLACEHOLDER"
+  fallback="https://placehold.it/400x225/f60/fff?text=FALLBACK"
   width="400"
   height="225"
 />
