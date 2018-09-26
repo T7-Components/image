@@ -28,13 +28,9 @@ class Demo extends React.Component {
 
         <hr />
 
-        <div
-          style={{
-            background: '#ccc',
-            height: '150vh',
-            marginBottom: '20px'
-          }}
-        />
+        <div className='keep-scrolling'>
+          Keep scrolling down…
+        </div>
 
         <hr />
 
@@ -91,6 +87,10 @@ class Demo extends React.Component {
 
         <p>
           The following image will fail approximately 5 seconds after scrolling 50% into view.
+        </p>
+
+        <p>
+          There may then be a slight delay, as the fallback image is fetched form the server.
         </p>
 
         <p>

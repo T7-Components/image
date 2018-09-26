@@ -642,3 +642,48 @@ blockquote {
   margin-bottom: 20px;
 }
 
+/*
+Keep scrolling `div`.
+==================================================
+*/
+
+.keep-scrolling {
+  background: #ccc;
+  margin-bottom: 20px;
+
+  -webkit-user-select: none;
+
+     -moz-user-select: none;
+
+      -ms-user-select: none;
+
+          user-select: none;
+  text-align: center;
+  white-space: nowrap;
+
+  /* Dimensions. */
+  max-width: 800px;
+  height: 150vh;
+  line-height: 150vh;
+
+  position: relative;
+}
+
+.keep-scrolling::before,
+.keep-scrolling::after {
+  content: "Keep scrolling down\2026";
+  line-height: 1;
+
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+
+.keep-scrolling::before {
+  top: 20%;
+}
+
+.keep-scrolling::after {
+  bottom: 20%;
+}
+
