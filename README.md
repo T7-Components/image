@@ -1,10 +1,16 @@
 # @t7/image
 
+The **Image** component displays an image when it is visible or nearly visible.
+
 ```
 npm install @t7/image --save-dev
 ```
 
-The **Image** component displays an image when it is visible or nearly visible.
+For complete browser support, please include an intersection-observer polyfill:
+
+```
+npm install intersection-observer
+```
 
 ---
 
@@ -115,14 +121,6 @@ The **onLoad** listener is dispatched when the `src` image has loaded.
 #### onFallback
 
 The **onFallback** listener is dispatched when the `fallback` image has loaded.
-
----
-
-For complete browser support, please include an intersection-observer polyfill:
-
-```sh
-npm install intersection-observer
-```
 
 ---
 
