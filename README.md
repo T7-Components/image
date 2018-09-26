@@ -120,18 +120,17 @@ loading process.
 />
 ```
 
-#### onIntersection
+#### `onIntersection`
 
-The **onIntersection** listener is dispatched when the `<Image>` is visible or
-is near to being visible for the first time.
+The `onIntersection` listener is dispatched when the `<Image>` all/part of the image is visible for the first time.
 
-#### onLoad
+#### `onLoad`
 
-The **onLoad** listener is dispatched when the `src` image has loaded.
+The `onLoad` listener is dispatched when the `src` file has loaded.
 
-#### onFallback
+#### `onFallback`
 
-The **onFallback** listener is dispatched when the `fallback` image has loaded.
+The `onFallback` listener is dispatched when the `fallback` file has loaded.
 
 ---
 
