@@ -34,7 +34,7 @@ Test coverage:
 
 ## Image Props
 
-`<Image>` uses `width` and `height` props to force an immediate layout, as if the image source had already been loaded. This prevents unnecessary recalculations by the browser and allows the image to be resized via CSS with proportional aspect ratios.
+The `<Image>` component uses `width` and `height` props to force an immediate layout, as if the image source had already been loaded. This prevents unnecessary recalculations by the browser and allows the image to be resized via CSS with proportional aspect ratios.
 
 It causes an encoded, inline SVG to be generated, which allows for a solid color to be displayed while the image is still processing. This prevents unintended rendering of `alt` text or the display of a browser's default "broken image" icon.
 
@@ -69,11 +69,13 @@ Passing these props yields the following markup output.
 />
 ```
 
-`<Image>` uses the `rootMargin` and `thresholds` props along with the [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) to load its source only as it comes into view.
+The `<Image>` component uses the `rootMargin` and `thresholds` props, along with the [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API), to load its source only as the image comes into view.
 
 For instance, if you wanted the image to be loaded only after it passed the `50%` mark, you could set the `thresholds` prop to `0.5`.
 
-Once visible, `<Image>` loads the `placeholder` and `src` images simultaneously. If the `placeholder` image is loaded before the `src`, then the placeholder is made visible as a background image. Once the `src` is loaded, then it is immediately displayed and the `placeholder` background image is removed. If the `src` cannot be loaded, then the `fallback` image is displayed instead.
+Once visible, `<Image>` loads the `placeholder` and `src` images simultaneously. If the `placeholder` image is loaded before the `src`, then the `placeholder` is made visible as a background image while `src` continues to load.
+
+Once the `src` is loaded, then it is immediately displayed and the background image is removed. If the `src` cannot be loaded, then the `fallback` image is displayed instead.
 
 ```jsx
 <Image
