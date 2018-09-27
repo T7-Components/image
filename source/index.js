@@ -49,6 +49,7 @@ class Image extends React.Component {
    * First mount.
    */
   componentDidMount () {
+    // Map element to instance.
     REACT_MAP.set(this.image.current, this)
 
     // Get observer.
@@ -91,7 +92,7 @@ class Image extends React.Component {
   /**
    * Runs after render.
    */
-  componentDidUpdate (prevProps) {
+  componentDidUpdate (prevProps = {}) {
     // New source?
     if (this.props.src !== prevProps.src) {
       // Remove events.
@@ -310,8 +311,8 @@ class Image extends React.Component {
 
     // Convert to numeric array.
     const normalizedThresholds =
-      list.map((item) => {
-        return Number(item) || 0
+      list.map((threshold) => {
+        return Number(threshold) || 0
       })
 
     // Convert thresholds array into string.
@@ -326,22 +327,18 @@ class Image extends React.Component {
     // Does observer exist?
     if (!c[strMargin][strThresholds]) {
       // Callback.
-      const f = (entries) => {
-        entries.forEach((entry) => {
-          // Peel apart.
-          const {
-            intersectionRatio,
-            target
-          } = entry
-
-          if (intersectionRatio > 0) {
+      const f = (entries = []) => {
+        // Loop through entries.
+        entries.forEach((entry = {}) => {
+          // Past threshold?
+          if (entry.intersectionRatio > 0) {
             // Remove observer.
             c[strMargin][strThresholds] &&
-            c[strMargin][strThresholds].unobserve(target)
+            c[strMargin][strThresholds].unobserve(entry.target)
 
             // Fire event.
-            REACT_MAP.has(target) &&
-            REACT_MAP.get(target).onIntersection()
+            REACT_MAP.has(entry.target) &&
+            REACT_MAP.get(entry.target).onIntersection()
           }
         })
       }
@@ -371,7 +368,10 @@ class Image extends React.Component {
   render () {
     // Get source.
     const src =
-      this.getPreloaderSrc(this.props.width, this.props.height)
+      this.getPreloaderSrc(
+        this.props.width,
+        this.props.height
+      )
 
     // Props for image.
     const propsForImage = {
