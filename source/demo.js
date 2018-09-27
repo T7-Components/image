@@ -41,7 +41,7 @@ class Demo extends React.Component {
         <hr />
 
         <p>
-          The following image will load approximately 5 seconds after scrolling 50% into view.
+          The following image will load approximately 5 seconds after scrolling into view.
         </p>
 
         <p>
@@ -59,12 +59,6 @@ class Demo extends React.Component {
             style={{
               background: '#69c'
             }}
-
-            // Intersection.
-            rootMargin='0px 0px 0px 0px'
-
-            // 50% viewable.
-            thresholds='0.5'
 
             // Intersection event.
             onIntersection={(event) => {
@@ -92,7 +86,7 @@ class Demo extends React.Component {
         <hr />
 
         <p>
-          The following image will fail approximately 5 seconds after scrolling 50% into view.
+          The following image will fail approximately 5 seconds after scrolling into view.
         </p>
 
         <p>
@@ -113,12 +107,6 @@ class Demo extends React.Component {
             style={{
               background: '#393'
             }}
-
-            // Intersection.
-            rootMargin='0px 0px 0px 0px'
-
-            // 50% viewable.
-            thresholds='0.5'
 
             // Intersection event.
             onIntersection={(event) => {

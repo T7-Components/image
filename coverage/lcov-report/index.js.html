@@ -22,12 +22,12 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>79/79</span>
+        <span class='fraction'>78/78</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">65% </span>
+        <span class="strong">60.47% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>26/40</span>
+        <span class='fraction'>26/43</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">84.21% </span>
@@ -37,7 +37,7 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>79/79</span>
+        <span class='fraction'>78/78</span>
       </div>
     </div>
   </div>
@@ -598,6 +598,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -876,10 +877,6 @@
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -921,6 +918,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -1102,6 +1102,7 @@ class Image extends React.Component {
    * First mount.
    */
   componentDidMount () {
+    // Map element to instance.
     REACT_MAP.set(this.image.current, this)
 &nbsp;
     // Get observer.
@@ -1144,7 +1145,7 @@ class Image extends React.Component {
   /**
    * Runs after render.
    */
-  componentDidUpdate (prevProps) {
+  componentDidUpdate (prevProps = <span class="branch-0 cbranch-no" title="branch not covered" >{})</span> {
     // New source?
     <span class="missing-if-branch" title="else path not taken" >E</span>if (this.props.src !== prevProps.src) {
       // Remove events.
@@ -1363,8 +1364,8 @@ class Image extends React.Component {
 &nbsp;
     // Convert to numeric array.
     const normalizedThresholds =
-      list.map((item) =&gt; {
-        return Number(item) || <span class="branch-1 cbranch-no" title="branch not covered" >0</span>
+      list.map((threshold) =&gt; {
+        return Number(threshold) || <span class="branch-1 cbranch-no" title="branch not covered" >0</span>
       })
 &nbsp;
     // Convert thresholds array into string.
@@ -1379,22 +1380,18 @@ class Image extends React.Component {
     // Does observer exist?
     if (!c[strMargin][strThresholds]) {
       // Callback.
-      const f = (entries) =&gt; {
-        entries.forEach((entry) =&gt; {
-          // Peel apart.
-          const {
-            intersectionRatio,
-            target
-          } = entry
-&nbsp;
-          <span class="missing-if-branch" title="else path not taken" >E</span>if (intersectionRatio &gt; 0) {
+      const f = (entries = <span class="branch-0 cbranch-no" title="branch not covered" >[])</span> =&gt; {
+        // Loop through entries.
+        entries.forEach((entry = <span class="branch-0 cbranch-no" title="branch not covered" >{})</span> =&gt; {
+          // Past threshold?
+          <span class="missing-if-branch" title="else path not taken" >E</span>if (entry.intersectionRatio &gt; 0) {
             // Remove observer.
             c[strMargin][strThresholds] &amp;&amp;
-<span class="branch-1 cbranch-no" title="branch not covered" >            c[strMargin][strThresholds].unobserve(target)</span>
+<span class="branch-1 cbranch-no" title="branch not covered" >            c[strMargin][strThresholds].unobserve(entry.target)</span>
 &nbsp;
             // Fire event.
-            REACT_MAP.has(target) &amp;&amp;
-<span class="branch-1 cbranch-no" title="branch not covered" >            REACT_MAP.get(target).onIntersection()</span>
+            REACT_MAP.has(entry.target) &amp;&amp;
+<span class="branch-1 cbranch-no" title="branch not covered" >            REACT_MAP.get(entry.target).onIntersection()</span>
           }
         })
       }
@@ -1424,7 +1421,10 @@ class Image extends React.Component {
   render () {
     // Get source.
     const src =
-      this.getPreloaderSrc(this.props.width, this.props.height)
+      this.getPreloaderSrc(
+        this.props.width,
+        this.props.height
+      )
 &nbsp;
     // Props for image.
     const propsForImage = {
@@ -1561,7 +1561,7 @@ export default Image
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Wed Sep 26 2018 19:43:46 GMT-0500 (CDT)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Thu Sep 27 2018 08:52:24 GMT-0500 (CDT)
 </div>
 </div>
 <script src="prettify.js"></script>
