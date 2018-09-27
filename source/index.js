@@ -5,8 +5,12 @@ import PropTypes from 'prop-types'
 // Utility methods.
 import { bind } from '@t7/utils'
 
+// Cached obervers.
+const OBSERVERS = new WeakMap()
+const REACT_MAP = new WeakMap()
+
 /**
- * The **Image** component displays an
+ * The `<Image>` component displays an
  * image when it is nearly/fully visible.
  *
  * @typedef {Object} Image
@@ -20,25 +24,18 @@ class Image extends React.Component {
     bind(this)
 
     /**
-     * Object to hold intersection observers.
-     *
-     * @member {Image} intersectionObservers
-    */
-    this.intersectionObservers = {}
-
-    /**
      * The primary image.
      *
      * @member {Image} image
     */
-    this.image = null
+    this.image = React.createRef()
 
     /**
      * The preloader image.
      *
      * @member {Image} preloader.
     */
-    this.preloader = document.createElement('img')
+    this.preloader = new window.Image()
 
     /**
      * Styles temporarily overridden on the image.
@@ -48,269 +45,200 @@ class Image extends React.Component {
     this.preservedStyle = {}
   }
 
-  // Fired after mount.
+  /**
+   * First mount.
+   */
   componentDidMount () {
-    // Class.
-    const {
-      image,
+    REACT_MAP.set(this.image.current, this)
 
-      // Events.
-      addEventListeners,
-      getIntersectionObserver,
-
-      // Props.
-      props: {
-        rootMargin,
-        thresholds
-      }
-    } = this
-
-    // Prepare the intersection observer listener for this instance.
+    // Get observer.
     const intersectionObserver =
-      getIntersectionObserver(rootMargin, thresholds)
+      this.getIntersectionObserver({
+        root: this.props.root,
+        rootMargin: this.props.rootMargin,
+        thresholds: this.props.thresholds
+      })
 
     // Add observer.
-    intersectionObserver.observe(image)
+    intersectionObserver.observe(this.image.current)
 
-    // Add listeners for this instance.
-    addEventListeners()
+    // Add events.
+    this.addEventListeners()
   }
 
-  // Fired as component is removed.
+  /**
+   * Clean up.
+   */
   componentWillUnmount () {
-    // Class.
-    const {
-      image,
-
-      // Events.
-      getIntersectionObserver,
-      removeEventListeners,
-
-      // Props.
-      props: {
-        rootMargin,
-        thresholds
-      }
-    } = this
-
-    // Remove the intersection observer listener for this instance.
+    // Get observer.
     const intersectionObserver =
-      getIntersectionObserver(rootMargin, thresholds)
+      this.getIntersectionObserver({
+        root: this.props.root,
+        rootMargin: this.props.rootMargin,
+        thresholds: this.props.thresholds
+      })
 
     // Remove observer.
-    intersectionObserver.unobserve(image)
+    intersectionObserver.unobserve(this.image.current)
 
-    // Remove listeners from this instance.
-    removeEventListeners()
+    // Remove events.
+    this.removeEventListeners()
+
+    // Clean up.
+    REACT_MAP.delete(this.image.current)
   }
 
-  // Fired after component updates.
-  componentDidUpdate (prevProps = {}) {
-    // Previous props.
-    const {
-      rootMargin: prevRootMargin,
-      src: prevSrc,
-      thresholds: prevThresholds
-    } = prevProps
-
-    // Class.
-    const {
-      image,
-      preloader,
-
-      // Events.
-      addEventListeners,
-      getIntersectionObserver,
-      removeEventListeners,
-
-      // Props.
-      props: {
-        rootMargin,
-        src,
-        thresholds
-      }
-    } = this
-
-    // Conditionally update the event listeners.
-    if (src !== prevSrc) {
-      removeEventListeners()
+  /**
+   * Runs after render.
+   */
+  componentDidUpdate (prevProps) {
+    // New source?
+    if (this.props.src !== prevProps.src) {
+      // Remove events.
+      this.removeEventListeners()
 
       // Set preloader source.
-      preloader.src = src
+      this.preloader.src = this.props.src
 
-      addEventListeners()
+      // Add events.
+      this.addEventListeners()
     }
 
-    // Conditionally update the intersection observers.
+    // New intersection?
     if (
-      rootMargin !== prevRootMargin ||
-      thresholds !== prevThresholds
+      this.props.rootMargin !== prevProps.rootMargin ||
+      this.props.thresholds !== prevProps.thresholds
     ) {
+      // Get observer.
       const prevIntersectionObserver =
-        getIntersectionObserver(prevRootMargin, prevThresholds)
+        this.getIntersectionObserver({
+          root: prevProps.root,
+          rootMargin: prevProps.rootMargin,
+          thresholds: prevProps.thresholds
+        })
 
+      // Get observer.
       const intersectionObserver =
-        getIntersectionObserver(rootMargin, thresholds)
+        this.getIntersectionObserver({
+          root: this.props.root,
+          rootMargin: this.props.rootMargin,
+          thresholds: this.props.thresholds
+        })
 
-      prevIntersectionObserver.unobserve(image)
-      intersectionObserver.observe(image)
+      // Remove observer.
+      prevIntersectionObserver.unobserve(this.image.current)
+
+      // Add observer.
+      intersectionObserver.observe(this.image.current)
     }
   }
 
   /**
-   * Adds listeners to preloader.
+   * Add events.
    */
   addEventListeners () {
-    // Class.
-    const {
-      preloader,
-
-      // Events.
-      onPreloaderLoad,
-      onPreloaderError
-    } = this
-
-    preloader.addEventListener('load', onPreloaderLoad)
-    preloader.addEventListener('error', onPreloaderError)
+    this.preloader.addEventListener('load', this.onPreloaderLoad)
+    this.preloader.addEventListener('error', this.onPreloaderError)
   }
 
   /**
-   * Removes listeners from image and preloader.
+   * Remove events.
    */
   removeEventListeners () {
-    // Class.
-    const {
-      image,
-      preloader,
-
-      // Events.
-      onImageLoad,
-      onPreloaderLoad,
-      onPreloaderError
-    } = this
-
-    image.removeEventListener('load', onImageLoad)
-    preloader.removeEventListener('load', onPreloaderLoad)
-    preloader.removeEventListener('error', onPreloaderError)
+    this.image.current.removeEventListener('load', this.onImageLoad)
+    this.preloader.removeEventListener('load', this.onPreloaderLoad)
+    this.preloader.removeEventListener('error', this.onPreloaderError)
   }
 
   /**
-   * Runs when the preloader image is loaded.
+   * Preloader load.
    */
   onPreloaderLoad () {
-    // Class.
-    const {
-      image,
-      preloader,
-
-      // Events.
-      onImageLoad
-    } = this
-
-    // Add the load listener on the image.
-    image.addEventListener('load', onImageLoad)
+    // Add event.
+    this.image.current.addEventListener('load', this.onImageLoad)
 
     // Update source.
-    image.src = preloader.src
+    this.image.current.src = this.preloader.src
   }
 
   /**
-   * Runs when the preloader image cannot load.
+   * Preloader fail.
    */
   onPreloaderError () {
-    // Class.
-    const {
-      image,
+    if (this.props.fallback) {
+      // Add event.
+      this.image.current.addEventListener('load', this.onImageLoad)
 
-      // Props.
-      props: { fallback }
-    } = this
-
-    if (fallback) {
-      image.src = fallback
+      // Update source.
+      this.image.current.src = this.props.fallback
     }
   }
 
   /**
-   * Runs when image is loaded.
+   * Image load.
    */
-  onImageLoad (event = {}) {
-    // Class.
-    const {
-      image,
-      preservedStyle,
-
-      // Props.
-      props: {
-        fallback,
-        onFallback,
-        onLoad,
-        src
-      }
-    } = this
-
+  onImageLoad (event) {
     // Remove placeholder styles.
-    image.style.backgroundImage =
-      preservedStyle.backgroundImage
+    this.image.current.style.backgroundImage =
+      this.preservedStyle.backgroundImage
 
     // Conditionally run load event.
-    if (image.src === src) {
-      onLoad(event)
+    if (this.image.current.src === this.props.src) {
+      this.props.onLoad(event)
     }
 
     // Conditionally run fallback event.
-    if (image.src === fallback) {
-      onFallback({
+    if (this.image.current.src === this.props.fallback) {
+      this.props.onFallback({
         type: 'fallback',
-        target: image
+        target: this.image.current
       })
     }
   }
 
   /**
-   * Runs when image intersects viewable area.
+   * Image intersection.
    */
   onIntersection () {
-    // Class.
-    const {
-      image,
-      preloader,
-      preservedStyle: p,
+    // Get background.
+    this.preservedStyle.backgroundImage =
+      this.image.current.style.backgroundImage
 
-      // Props.
-      props: {
-        onIntersection,
-        placeholder,
-        src
-      }
-    } = this
+    // Backgrounds.
+    const bg1 =
+      `url(${this.props.placeholder})`
 
-    // Conditionally update placeholder styles.
-    p.backgroundImage =
-      image.style.backgroundImage
+    const bg2 =
+      `url(${this.preservedStyle.backgroundImage})`
 
-    if (placeholder) {
-      image.style.backgroundImage = (
-        p.backgroundImage
-          ? `url(${placeholder}),${p.backgroundImage}`
-          : `url(${placeholder})`
+    const both =
+      [bg1, bg2].join(',')
+
+    // Placeholder exists?
+    if (this.props.placeholder) {
+      // Set background.
+      this.image.current.style.backgroundImage = (
+        // Existing background?
+        this.preservedStyle.backgroundImage
+          ? both
+          : bg1
       )
     }
 
-    // Conditionally update preloader image source.
-    if (src) {
-      preloader.src = src
+    // Update source?
+    if (this.props.src) {
+      this.preloader.src = this.props.src
     }
 
-    // Run intersection event.
-    onIntersection({
+    // Fire event.
+    this.props.onIntersection({
       type: 'intersection',
-      target: image
+      target: this.image.current
     })
   }
 
   /**
-   * Return an inline SVG with a set width and height as a data source.
+   * Inline SVG with width and height.
    *
    * The width of the image.
    * @param {Number|String} width
@@ -332,29 +260,37 @@ class Image extends React.Component {
   }
 
   /**
-   * Return a cached intersection observer.
-   *
-   * The rootMargin being used.
-   * @param {Number|String} rootMargin
-   *
-   * The thresholds being used.
-   * @param {Array|Number|String} thresholds
-   *
-   * The intersection observer.
-   * @return {String}
-   *
-   * See {@link https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API Intersection Observer API}
-   */
-  getIntersectionObserver (rootMargin, thresholds) {
+  * Return a cached intersection observer.
+  *
+  * The rootMargin being used.
+  * @param {Number|String} rootMargin
+  *
+  * The thresholds being used.
+  * @param {Array|Number|String} thresholds
+  *
+  * The intersection observer.
+  * @return {String}
+  *
+  * See {@link https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API Intersection Observer API}
+  */
+  getIntersectionObserver ({ root, rootMargin, thresholds }) {
+    // Ensure node.
+    const base = (
+      root instanceof window.Node
+        ? root
+        : window
+    )
+
+    // Does cache exist?
+    if (!OBSERVERS.has(base)) {
+      OBSERVERS.set(base, {})
+    }
+
     // Get cache.
-    const {
-      onIntersection,
-      intersectionObservers: o
-    } = this
+    const c = OBSERVERS.get(base)
 
     // To string.
-    const strRoot =
-      String(rootMargin)
+    const strMargin = String(rootMargin)
 
     // Set in conditional.
     let list
@@ -383,58 +319,47 @@ class Image extends React.Component {
       normalizedThresholds.join(' ')
 
     // Add layer?
-    if (!o[strRoot]) {
-      o[strRoot] = {}
+    if (!c[strMargin]) {
+      c[strMargin] = {}
     }
 
     // Does observer exist?
-    if (!o[strRoot][strThresholds]) {
-      // Temp.
-      o[strRoot][strThresholds] = {
-        observe: () => {},
-        unobserve: () => {}
-      }
-
+    if (!c[strMargin][strThresholds]) {
       // Callback.
-      const f = (entries = []) => {
-        // Loop through.
-        entries.forEach((entry = {}) => {
+      const f = (entries) => {
+        entries.forEach((entry) => {
           // Peel apart.
           const {
             intersectionRatio,
             target
           } = entry
 
-          // Valid number?
           if (intersectionRatio > 0) {
             // Remove observer.
-            o[strRoot][strThresholds].unobserve(target)
+            c[strMargin][strThresholds] &&
+            c[strMargin][strThresholds].unobserve(target)
 
             // Fire event.
-            onIntersection()
+            REACT_MAP.has(target) &&
+            REACT_MAP.get(target).onIntersection()
           }
         })
       }
 
       // Options.
       const options = {
-        rootMargin: strRoot,
+        root,
+        rootMargin: strMargin,
         thresholds: normalizedThresholds
       }
 
-      // Has support?
-      if (typeof window.IntersectionObserver === 'function') {
-        // Create observer.
-        const observer =
-          new window.IntersectionObserver(f, options)
-
-        // Assign.
-        o[strRoot][strThresholds] = observer
-      }
+      // Create observer.
+      c[strMargin][strThresholds] =
+        new window.IntersectionObserver(f, options)
     }
 
     // Expose observer.
-    return o[strRoot][strThresholds]
+    return c[strMargin][strThresholds]
   }
 
   /**
@@ -444,42 +369,25 @@ class Image extends React.Component {
    * See {@link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img Image}.
    */
   render () {
-    // Class.
-    const {
-      // Events.
-      getPreloaderSrc,
-
-      // Props.
-      props: {
-        alt,
-        height,
-        style,
-        width
-      }
-    } = this
-
+    // Get source.
     const src =
-      getPreloaderSrc(width, height)
+      this.getPreloaderSrc(this.props.width, this.props.height)
 
     // Props for image.
     const propsForImage = {
-      alt,
-      height,
       src,
-      style,
-      width,
+      alt: this.props.alt,
+      height: this.props.height,
+      style: this.props.style,
+      width: this.props.width,
 
       // Assign ref.
-      ref: (el) => {
-        this.image = el
-      }
+      ref: this.image
     }
 
     // Expose UI.
     return (
-      <img
-        {...propsForImage}
-      />
+      <img {...propsForImage} />
     )
   }
 }
@@ -521,6 +429,14 @@ Image.propTypes = {
     PropTypes.string,
     PropTypes.number
   ]),
+
+  /**
+   * The root element to check intersection.
+   *
+   * For the window's viewport, this should
+   * be left empty, and defaults to `null`.
+   */
+  root: PropTypes.object,
 
   /**
    * The amount to grow or shrink each side of
@@ -574,6 +490,7 @@ Image.defaultProps = {
   alt: '',
   width: 0,
   height: 0,
+  root: null,
   rootMargin: '0px 0px 0px 0px',
   thresholds: 0.01,
 

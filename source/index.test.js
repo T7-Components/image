@@ -36,9 +36,6 @@ describe('Image', () => {
     jest.resetAllMocks()
   })
 
-  // Tracker object.
-  const TRACKER = {}
-
   // Observers.
   const observe = jest.fn()
   const unobserve = jest.fn()
@@ -59,9 +56,6 @@ describe('Image', () => {
         // Fire callback.
         f(entries)
       }
-
-      // Track options.
-      TRACKER.options = options
 
       // Expose object.
       return {
@@ -86,6 +80,11 @@ describe('Image', () => {
     placeholder: 'http://lodalhost/placeholder.jpg',
     src: 'http://localhost/example_1.jpg',
 
+    // Style.
+    style: {
+      backgroundImage: 'http://localhost/background.jpg'
+    },
+
     // Dimensions.
     width: 400,
     height: 400,
@@ -103,8 +102,8 @@ describe('Image', () => {
   } = renderWithProps(props)
 
   // Spy.
-  el.image.addEventListener = jest.fn()
-  el.image.removeEventListener = jest.fn()
+  el.image.current.addEventListener = jest.fn()
+  el.image.current.removeEventListener = jest.fn()
   el.preloader.addEventListener = jest.fn()
   el.preloader.removeEventListener = jest.fn()
 
@@ -128,18 +127,8 @@ describe('Image', () => {
     expect(el.props.thresholds)
       .toBe(props.thresholds)
 
-    expect(el.image)
+    expect(el.image.current)
       .toBe(parent)
-
-    expect(el.intersectionObservers)
-      .toMatchObject({
-        [props.rootMargin]: {
-          [props.thresholds]: {
-            observe,
-            unobserve
-          }
-        }
-      })
   })
 
   // =====================
@@ -189,9 +178,9 @@ describe('Image', () => {
     // =========================
 
     expect(unobserve)
-      .toBeCalledWith(el.image)
+      .toBeCalledWith(el.image.current)
 
-    expect(el.image.removeEventListener)
+    expect(el.image.current.removeEventListener)
       .toBeCalledWith('load', el.onImageLoad)
 
     expect(el.preloader.removeEventListener)
@@ -217,10 +206,10 @@ describe('Image', () => {
     el.componentDidUpdate(prevProps)
 
     expect(unobserve)
-      .toBeCalledWith(el.image)
+      .toBeCalledWith(el.image.current)
 
     expect(observe)
-      .toBeCalledWith(el.image)
+      .toBeCalledWith(el.image.current)
   })
 
   // ================================
@@ -228,21 +217,21 @@ describe('Image', () => {
   // ================================
 
   it('handles preloader "load" event', () => {
-    expect(el.image.addEventListener)
+    expect(el.image.current.addEventListener)
       .not
       .toBeCalled()
 
-    expect(el.image.src)
+    expect(el.image.current.src)
       .not
       .toBe(el.preloader.src)
 
     // Fire event.
     el.onPreloaderLoad()
 
-    expect(el.image.addEventListener)
+    expect(el.image.current.addEventListener)
       .toBeCalledWith('load', el.onImageLoad)
 
-    expect(el.image.src)
+    expect(el.image.current.src)
       .toBe(el.preloader.src)
   })
 
@@ -251,14 +240,14 @@ describe('Image', () => {
   // =================================
 
   it('handles preloader "error" event', () => {
-    expect(el.image.src)
+    expect(el.image.current.src)
       .not
       .toBe(props.fallback)
 
     // Fire event.
     el.onPreloaderError()
 
-    expect(el.image.src)
+    expect(el.image.current.src)
       .toBe(props.fallback)
   })
 
@@ -281,7 +270,7 @@ describe('Image', () => {
     }
 
     // Force change.
-    el.image.src = props.src
+    el.image.current.src = props.src
 
     // Fire event.
     el.onImageLoad(e)
@@ -290,7 +279,7 @@ describe('Image', () => {
       .toBeCalledWith(e)
 
     // Force change.
-    el.image.src = props.fallback
+    el.image.current.src = props.fallback
 
     // Fire event.
     el.onImageLoad(e)
@@ -298,7 +287,7 @@ describe('Image', () => {
     expect(props.onFallback)
       .toBeCalledWith({
         type: 'fallback',
-        target: el.image
+        target: el.image.current
       })
   })
 
@@ -317,13 +306,13 @@ describe('Image', () => {
     expect(props.onIntersection)
       .toBeCalledWith({
         type: 'intersection',
-        target: el.image
+        target: el.image.current
       })
   })
 
-  // ===============================
-  // Test for intersection observer.
-  // ===============================
+  // // ===============================
+  // // Test for intersection observer.
+  // // ===============================
 
   it('builds an intersection observer', () => {
     // Dummy values.
@@ -338,7 +327,10 @@ describe('Image', () => {
 
     // Fire event.
     const observer =
-      el.getIntersectionObserver(rootMargin, thresholds)
+      el.getIntersectionObserver({
+        rootMargin,
+        thresholds
+      })
 
     expect(observer)
       .toMatchObject({
