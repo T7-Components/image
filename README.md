@@ -2,13 +2,15 @@
 
 This is a React component that loads an image source, only after it is partially or fully visible in the viewport.
 
-```
-npm install @t7/image --save-dev
+```sh
+# Install via NPM.
+npm install @t7/image --save
 ```
 
 For complete browser support, please include a `window.IntersectionObserver` polyfill:
 
-```
+```sh
+# Install via NPM.
 npm install intersection-observer --save
 ```
 
